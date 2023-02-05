@@ -1,0 +1,41 @@
+
+HW Info
+=======
+
+NA
+
+
+OSX SPHardwareDataType
+======================
+
+Hardware:
+
+    Hardware Overview:
+
+      Model Name: MacBook Pro
+      Model Identifier: MacBookPro18,1
+      Model Number: Z14V001BLFN/A
+      Chip: Unknown
+      Total Number of Cores: 10 (8 performance and 2 efficiency)
+      Memory: 16 GB
+      System Firmware Version: 8419.41.10
+      OS Loader Version: 8419.41.10
+      Serial Number (system): MYF95G4CL2
+      Hardware UUID: 8365763B-F97C-5177-B7D1-E3D01478CBF6
+      Provisioning UDID: 8365763B-F97C-5177-B7D1-E3D01478CBF6
+      Activation Lock Status: Enabled
+
+
+
+Hostname
+========
+
+immortalite
+
+CPU info
+========
+
+
+MEM info
+========
+
