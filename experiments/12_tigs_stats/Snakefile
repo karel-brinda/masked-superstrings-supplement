@@ -1,0 +1,396 @@
+import glob
+import socket
+
+
+shell.prefix("set -euo pipefail")
+
+
+configfile: "config.yaml"
+
+
+HOSTNAME = socket.gethostname()
+if HOSTNAME == "":
+    HOSTNAME = "NA"
+print(HOSTNAME)
+
+# D_VALS = range(1, 6)
+# K_VALS = range(2, 32)
+# S_ALGS = ["streaming", "greedy", "pseudosimplitigs", "greedyAC", "pseudosimplitigsAC"]
+M_ALGS = ["default", "zeros", "ones", "runs"]
+# GENOMES = ["spneumoniae", "spneumoniae-pangenome", "yeast"]
+#
+## if config["testing"]:
+##    D_VALS = [1]
+##    K_VALS = [10]
+##    testing_suffix = "__test"
+## else:
+##    testing_suffix = ""
+#
+testing_suffix = ""
+#
+#### All combination of params to be tested
+# prefs_S_comp = set()
+# prefs_SM_comp = set()
+# for g in GENOMES:
+#    for S in S_ALGS:
+#        for k in K_VALS:
+#            for d in D_VALS:
+#                for M in ["default", "zeros", "ones", "runs"]:
+#                    # here we can remove unwanted combinations / replace non-sense combinations of params
+#                    if S in ["greedy", "streaming", "greedyAC"]:
+#                        d = "na"
+#                    # two versions of prefixes (with and without mask opt)
+#                    prefs_S_comp.add(f"{g}.S_{S}.k_{k}.d_{d}")
+#                    prefs_SM_comp.add(f"{g}.S_{S}.k_{k}.d_{d}.M_{M}")
+## prefs_S_comp = sorted(list(prefs_S_comp))
+#
+## print(a)
+# prefs_SM_comp = sorted(list(prefs_SM_comp))
+
+prefs_SM_comp = []
+for x in glob.glob("01_download/*.fa"):
+    for m in M_ALGS:
+        pref = (
+            os.path.basename(x).replace(".fa", "").replace("a_", "S_") + f".d_na.M_{m}"
+        )
+        prefs_SM_comp.append(pref)
+
+prefs_SM_comp = [
+    x
+    for x in prefs_SM_comp
+    # if x.find("yeast") == -1
+]
+
+# print(f"Prefs0: {prefs0}")
+# print(f"Prefs: {prefs_SM_comp}")
+
+
+################################################################
+
+
+rule all:
+    input:
+        f"99_results/masked_superstrings_properties.{HOSTNAME}{testing_suffix}.tsv",
+        #f"99_results/camel_memtime.{HOSTNAME}{testing_suffix}.tsv",
+        f"99_results/maskopt_memtime.{HOSTNAME}{testing_suffix}.tsv",
+
+
+#####################################################################################################
+# AGGREGATE STATISTICS
+#####################################################################################################
+
+
+rule aggregate_masked_superstrings_properties:
+    output:
+        tsv=f"99_results/masked_superstrings_properties.{HOSTNAME}{testing_suffix}.tsv",
+    input:
+        [f"12_masked_superstrings_properties/{HOSTNAME}/{p}.tsv" for p in prefs_SM_comp],
+    params:
+        tsv=f"99_results/masked_superstrings_properties.{HOSTNAME}{testing_suffix}.tsv.tmp",
+    priority: 50
+    shell:
+        """
+        cat {input} \\
+            | awk '!seen[$0]++' \\
+            | tee {params.tsv} \\
+            | ./sort_output_tsv.py \\
+            > {output.tsv}
+        """
+
+
+rule aggregate_maskopt_memtime_stats:
+    output:
+        tsv=f"99_results/maskopt_memtime.{HOSTNAME}{testing_suffix}.tsv",
+    input:
+        [f"11_maskopt_memtime/{HOSTNAME}/{p}.tsv" for p in prefs_SM_comp],
+    params:
+        tsv=f"99_results/maskopt_memtime.{HOSTNAME}{testing_suffix}.tsv.tmp",
+    priority: 50
+    shell:
+        """
+        cat {input} \\
+            | awk '!seen[$0]++' \\
+            | tee {params.tsv} \\
+            | ./sort_output_tsv.py \\
+            > {output.tsv}
+        """
+
+
+#####################################################################################################
+# COMPUTE STATS OF MASK SUPERSTRINGS
+#####################################################################################################
+
+
+# Collect size stats
+rule make_size_stats:
+    output:
+        sizes=f"12_masked_superstrings_properties/{HOSTNAME}/"
+        + "{g}.S_{S}.k_{k}.d_{d}.M_{M}.tsv",
+    input:
+        txt0="09_tigs/{g}.S_{S}.k_{k}.txt.xz",
+        txt1="10_masked_superstrings/{g}.S_{S}.k_{k}.d_{d}.M_{M}.superstring.txt.xz",
+        txt2="10_masked_superstrings/{g}.S_{S}.k_{k}.d_{d}.M_{M}.mask.txt.xz",
+        txt3="10_masked_superstrings/{g}.S_{S}.k_{k}.d_{d}.M_{M}.maskedSuperstring.txt.xz",
+        txt4="10_masked_superstrings/{g}.S_{S}.k_{k}.d_{d}.M_{M}.kmerCount",
+    params:
+        pref="{g}.S_{S}.k_{k}.d_{d}.M_{M}",
+    priority: 50
+    shell:
+        """
+        (
+        #1
+        printf '%s\\t%s\\t%s\\t%s\\t%s' genome S_alg k d M_alg
+        printf '\\t'
+
+        #2
+        printf '%s\\t%s\\t%s\\t%s\\t%s' kmer_count l o z r
+        printf '\\t'
+
+        #2.5
+        printf '%s\\t%s\\t%s' tigs_ns tigs_cl enc0_xz_bytes
+        printf '\\t'
+
+        #3
+        printf '%s\\t%s\\t%s\\t%s' S_xz_bytes M_xz_bytes enc1_xz_bytes enc2_xz_bytes
+        printf '\\t'
+
+        #4
+        printf '%s' pref
+        printf '\\n'
+
+
+        ##################################
+
+        #1
+        printf '%s\\t%s\\t%s\\t%s\\t%s' \\
+            {wildcards.g} \\
+            {wildcards.S} \\
+            {wildcards.k} \\
+            {wildcards.d} \\
+            {wildcards.M}
+        printf '\\t'
+
+        #2
+        printf '%d\\t%d\\t%d\\t%d\\t%d' \\
+            $(cat {input.txt4} | xargs echo) \\
+            $(xzcat {input.txt2} | wc -c) \\
+            $(xzcat {input.txt2} | perl -pe 's/0//g' | wc -c) \\
+            $(xzcat {input.txt2} | perl -pe 's/1//g' | wc -c) \\
+            $(xzcat {input.txt2} | perl -pe 's/1+/1/g' | perl -pe 's/0//g' | wc -c)
+        printf '\\t'
+
+        #2.5
+        printf '%d\\t%d\\t%d' \\
+            $(xzcat {input.txt0} | wc -l | xargs echo) \\
+            $(xzcat {input.txt0} | perl -pe 's/\n//g' | wc -c) \\
+            $(cat {input.txt0} | wc -c)
+        printf '\\t'
+
+        #3
+        printf '%d\\t%d\\t%d\\t%d' \\
+            $(cat {input.txt1} | wc -c) \\
+            $(cat {input.txt2} | wc -c) \\
+            $(cat {input.txt1} {input.txt2} | wc -c) \\
+            $(cat {input.txt3} | wc -c)
+
+        printf '\\t'
+
+        #4
+        printf '%s' \\
+            {params.pref}
+        printf '\\n'
+
+        ) > {output.sizes}
+        """
+
+
+rule count_kmers:
+    output:
+        txt="10_masked_superstrings/{g}.S_{S}.k_{k}.d_{d}.M_{M}.kmerCount",
+    input:
+        txt="10_masked_superstrings/{g}.S_{S}.k_{k}.d_{d}.M_{M}.maskedSuperstring.txt.xz",
+    priority: 50
+    shell:
+        """
+        ./count_kmers.py -k {wildcards.k} -t -p {input.txt} > {output.txt}
+        """
+
+
+rule extract_and_compress_superstring:
+    output:
+        txt="10_masked_superstrings/{g}.S_{S}.k_{k}.d_{d}.M_{M}.superstring.txt.xz",
+    input:
+        txt="10_masked_superstrings/{g}.S_{S}.k_{k}.d_{d}.M_{M}.maskedSuperstring.txt.xz",
+    priority: 50
+    shell:
+        """
+        xzcat {input.txt} \\
+            | tr a-z A-Z \\
+            | xz -9 -T1 \\
+            > {output.txt}
+        """
+
+
+rule extract_and_compress_mask:
+    output:
+        txt="10_masked_superstrings/{g}.S_{S}.k_{k}.d_{d}.M_{M}.mask.txt.xz",
+    input:
+        txt="10_masked_superstrings/{g}.S_{S}.k_{k}.d_{d}.M_{M}.maskedSuperstring.txt.xz",
+    priority: 50
+    shell:
+        """
+        NL=$(xzcat "{input.txt}" | wc -l | xargs echo)
+        if [ "$NL" -ne 0 ]; then
+            >&2 echo "ERROR: Newline characters in the masked superstring file {input.txt} ($NL NLs found)"
+            exit 1
+        fi
+
+        xzcat {input.txt} \\
+            | tr 'acgt' '0000' \\
+            | tr 'ACGT' '1111' \\
+            | xz -9 -T1 \\
+            > {output.txt}
+        """
+
+
+#####################################################################################################
+# REOPTIMIZE MASKS
+#####################################################################################################
+
+
+rule extract_tigs:
+    output:
+        txt="09_tigs/{g}.S_{S}.k_{k}.txt.xz",
+    input:
+        fa="01_download/{g}.a_{S}.k_{k}.fa",
+    priority: 50
+    shell:
+        """
+        seqtk seq -U {input.fa} \\
+            | grep -v '>' \\
+            | xz -9 -T1 \\
+            > {output.txt}
+        """
+
+
+rule extract_default_masked_superstring:
+    output:
+        txt="10_masked_superstrings/{g}.S_{S}.k_{k}.d_na.M_default.maskedSuperstring.txt.xz",
+        log0=f"11_maskopt_memtime/{HOSTNAME}/" + "{g}.S_{S}.k_{k}.d_na.M_default.log",
+    input:
+        fa="01_download/{g}.a_{S}.k_{k}.fa",
+    priority: 50
+    shell:
+        """
+        ../../scripts/benchmark.py --log "{output.log0}" "\\
+        ./tigs_to_maskedsuperstring.py -k {wildcards.k} -p {input.fa} \\
+            | grep -v '>' \\
+            | perl -pe 's/\n//g' \\
+            " \\
+            | xz -9 -T1 \\
+            > {output.txt}
+        """
+
+
+rule mask_maximize_num_ones:
+    output:
+        txt="10_masked_superstrings/{g}.S_{S}.k_{k}.d_{d}.M_ones.maskedSuperstring.txt.xz",
+        log0=f"11_maskopt_memtime/{HOSTNAME}/" + "{g}.S_{S}.k_{k}.d_{d}.M_ones.log",
+    input:
+        txt="10_masked_superstrings/{g}.S_{S}.k_{k}.d_{d}.M_default.maskedSuperstring.txt.xz",
+    priority: 50
+    shell:
+        """
+        ../../scripts/benchmark.py --log "{output.log0}" "\\
+        ./maskMaxNumOnes.py -t \\
+                -k {wildcards.k} \\
+                -p {input.txt} \\
+            " \\
+            | xz -9 -T1 \\
+            > {output.txt}
+        """
+
+
+rule mask_maximize_num_zeros:
+    output:
+        txt="10_masked_superstrings/{g}.S_{S}.k_{k}.d_{d}.M_zeros.maskedSuperstring.txt.xz",
+        log0=f"11_maskopt_memtime/{HOSTNAME}/" + "{g}.S_{S}.k_{k}.d_{d}.M_zeros.log",
+    input:
+        txt="10_masked_superstrings/{g}.S_{S}.k_{k}.d_{d}.M_default.maskedSuperstring.txt.xz",
+    priority: 50
+    shell:
+        """
+        ../../scripts/benchmark.py --log "{output.log0}" "\\
+        ./maskMaxNumZeros.py -t \\
+                -k {wildcards.k} \\
+                -p {input.txt} \\
+            " \\
+            | xz -9 -T1 \\
+            > {output.txt}
+        """
+
+
+rule mask_minimize_num_runs:
+    output:
+        txt="10_masked_superstrings/{g}.S_{S}.k_{k}.d_{d}.M_runs.maskedSuperstring.txt.xz",
+        log0=f"11_maskopt_memtime/{HOSTNAME}/" + "{g}.S_{S}.k_{k}.d_{d}.M_runs.log",
+    input:
+        txt="10_masked_superstrings/{g}.S_{S}.k_{k}.d_{d}.M_default.maskedSuperstring.txt.xz",
+    priority: 50
+    shell:
+        """
+        ../../scripts/benchmark.py --log "{output.log0}" "\\
+        ./maskMinNumRuns.py -t \\
+                -k {wildcards.k} \\
+                -p {input.txt} \\
+            " \\
+            | xz -9 -T1 \\
+            > {output.txt}
+        """
+
+
+rule reformat_maskopt_memtime_logs:
+    output:
+        f"11_maskopt_memtime/{HOSTNAME}/" + "{g}.S_{S}.k_{k}.d_{d}.M_{M}.tsv",
+    input:
+        f"11_maskopt_memtime/{HOSTNAME}/" + "{g}.S_{S}.k_{k}.d_{d}.M_{M}.log",
+    params:
+        pref="{g}.S_{S}.k_{k}.d_{d}.M_{M}",
+    priority: 50
+    shell:
+        """
+        (
+            printf 'pref\\tgenome\\tS_alg\\tk\\td\\tM_alg\\t'
+
+            cat {input} \\
+                | grep real
+
+            printf '%s\\t%s\\t%s\\t%d\\t%s\\t%s\\t' \\
+                {params.pref} \\
+                {wildcards.g} \\
+                {wildcards.S} \\
+                {wildcards.k} \\
+                {wildcards.d} \\
+                {wildcards.M} \\
+            ;
+
+            cat {input} \\
+                | grep -Ev '(real|#)'
+
+        ) > {output}
+        """
+
+
+#####################################################################################################
+# GET HW INFO ABOUT THE CURRENT COMPUTER
+#####################################################################################################
+
+
+rule add_hw_info:
+    output:
+        hw=f"00_hw_info/{HOSTNAME}.txt",
+    priority: 50
+    shell:
+        """
+        ../../scripts/print_hw_info.sh > {output.hw}
+        """
