@@ -1,0 +1,6 @@
+[submodule "experiments/11_kmer_camel_comparison_v3/kmercamel"]
+	path = experiments/11_kmer_camel_comparison_v3/kmercamel
+	url = https://github.com/GordonHoklinder/kmercamel/
+[submodule "experiments/12_tigs_stats/kmercamel"]
+	path = experiments/12_tigs_stats/kmercamel
+	url = https://github.com/GordonHoklinder/kmercamel/
