@@ -3,8 +3,10 @@
 <!-- vim-markdown-toc GFM -->
 
 * [Introduction](#introduction)
-* [Citation](#citation)
-* [KmerCamel🐫](#kmercamel)
+  * [Citation](#citation)
+* [Programs](#programs)
+  * [Superstring computation - KmerCamel🐫](#superstring-computation---kmercamel)
+  * [Mask optimization](#mask-optimization)
 * [Data used for experimental results](#data-used-for-experimental-results)
 * [Reproducing experimental results](#reproducing-experimental-results)
 * [Remarks](#remarks)
@@ -15,7 +17,7 @@
 
 Here we provide supplementary materials for the paper [Masked superstrings as a unified framework for textual *k*-mer set representations](https://doi.org/10.1101/2023.02.01.526717), including the used data and pipelines.
 
-## Citation
+### Citation
 
 > Ondřej Sladký, Pavel Veselý, and Karel Břinda: Masked superstrings as a unified framework for textual *k*-mer set representations. *bioRxiv* 2023.02.01.526717, 2023.
 [https://doi.org/10.1101/2023.02.01.526717](https://doi.org/10.1101/2023.02.01.526717)
@@ -31,11 +33,45 @@ Here we provide supplementary materials for the paper [Masked superstrings as a 
 }
 ```
 
-## KmerCamel🐫
 
-The analyses were performed using [KmerCamel🐫](https://github.com/GordonHoklinder/kmercamel),
-which experimentally implements local and global greedy heuristics for masked superstring
-computation using hash tables and the Aho-Corasick automaton.
+## Programs
+
+### Superstring computation - KmerCamel🐫
+
+Superstrings were computed using the
+[KmerCamel🐫](https://github.com/GordonHoklinder/kmercamel) program, which
+experimentally implements local and global greedy heuristics for masked
+superstring computation using hash tables and the [Aho-Corasick
+automaton](https://en.wikipedia.org/wiki/Aho%E2%80%93Corasick_algorithm).
+
+The computed superstrings are provided with a default mask, which always
+contains the minimum number of 1's (i.e., every *k*-mer occurs just once). The
+specific pattern reflects the order in which individual *k*-mers and added to
+the superstring, therefore, a change of the underlying data structure
+(hash-table vs. AC automaton) results in different masks with potentially
+different compressibility. (Denoted by `D` in the paper.)
+
+
+### Mask optimization
+
+Individual mask optimization strategies are implemented in dedicated Python
+scripts in
+[http://experiments/08_optimize_masks](http://experiments/08_optimize_masks/).
+
+* [maskMinNumRuns.py](experiments/08_optimize_masks/maskMinNumRuns.py).
+  Minimization of the number of runs of 1's using [integer
+  programming](https://en.wikipedia.org/wiki/Integer_programming) using the
+  [PuLP solver](https://github.com/coin-or/pulp/), as described in Appendix H.
+  (Denoted by `R` in the paper.)
+* [maskMaxNumOnes.py](experiments/08_optimize_masks/maskMaxNumOnes.py).
+  Maximization of the number of 1's in the mask, which is done by 2 passes
+  through the superstring - collection of *k*-mers and masking on all of their
+  occurrences. (Denoted by `O` in the paper.)
+* [maskMaxNumZeros.py](experiments/08_optimize_masks/maskMaxNumZeros.py).
+  Greedy minimization of the number of 1's (maximization of the number of 0's),
+  which is done by 1 pass through the data, masking on the first occurrence of
+  each *k*-mer and masking off the following ones. (Denoted by `Z` in the paper.)
+
 
 ## Data used for experimental results
 The results in Figures 2 and 3 and Tables 1 and 2 were obtained using data in `experiments/11_kmer_camel_comparison_v3/99_results/masked_superstrings_properties.kamenac.tsv`.
