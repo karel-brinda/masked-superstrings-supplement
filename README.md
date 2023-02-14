@@ -7,8 +7,13 @@
 * [Programs](#programs)
   * [Superstring computation - KmerCamel🐫](#superstring-computation---kmercamel)
   * [Mask optimization](#mask-optimization)
-* [Data used for experimental results](#data-used-for-experimental-results)
-* [Reproducing experimental results](#reproducing-experimental-results)
+* [Experimental evaluation](#experimental-evaluation)
+  * [Input data](#input-data)
+  * [Reproducing experimental results](#reproducing-experimental-results)
+* [Figures](#figures)
+  * [Fig. 1](#fig-1)
+  * [Fig. 2](#fig-2)
+  * [Fig. 3](#fig-3)
 * [Remarks](#remarks)
 
 <!-- vim-markdown-toc -->
@@ -44,14 +49,18 @@ experimentally implements local and global greedy heuristics for masked
 superstring computation using hash tables and the [Aho-Corasick
 automaton](https://en.wikipedia.org/wiki/Aho%E2%80%93Corasick_algorithm).
 
-The computed superstrings are provided with the default masks provided by
-KmerCamel🐫. Such masks contain the minimum possible number of 1's (i.e., every
-*k*-mer masked on only once). The specific pattern of 1's and 0's reflect the
-orders in which individual *k*-mers are added to the superstrings, therefore,
-changes of the underlying data structures (hash-table vs. AC automaton), as
-well as changing machines or compilers, results or may result in different
-superstrings and masks with different mask compressibility. These default masks
-are denoted by `D` in the paper.
+By default, the superstrings computed by KmerCamel🐫 come with *default* masks;
+these contain the minimal possible number of 1's (i.e., every *k*-mer masked on
+only once) and the patterns of 1's and 0's reflect the orders in which
+individual *k*-mers were added to the superstrings. These default masks are
+denoted by `D` in the paper.
+
+Importantly, changes in the underlying data structures (hash-table vs. AC
+automaton), as well as changing machines or compilers, results/may result in
+different superstrings and their mask, and the specific choices can affect mask
+compressibility. For instance, hash-table-based approaches tend to produce more
+regular masks that are better compressible (e.g., for nearly complete de Bruijn
+graphs).
 
 
 ### Mask optimization
@@ -77,13 +86,16 @@ directory, which implement individual mask optimization strategies.
   occurrences. (Denoted by `Z` in the paper.)
 
 
-## Data used for experimental results
+## Experimental evaluation
+
+### Input data
 
 The results in Figures 2 and 3 and Tables 1 and 2 were obtained using data in `experiments/11_kmer_camel_comparison_v3/99_results/masked_superstrings_properties.kamenac.tsv`.
 
 Additionally, Tables 1 and 2 use data from `experiments/12_tigs_stats/99_results/masked_superstrings_properties.kamenik.tsv`.
 
-## Reproducing experimental results
+### Reproducing experimental results
+
 After cloning this repository, run the following (besides standard Linux programs, it requires [Snakemake](https://snakemake.readthedocs.io/en/stable/) and [seqtk](https://github.com/lh3/seqtk)):
 ```
 git submodule update --init # to download KmerCamel
@@ -93,6 +105,31 @@ make
 cd ../12_tigs_stats/
 make
 ```
+
+
+## Figures
+
+Figures are created using Adobe Illustrator and combine individual subfigures generated using R by scripts provided in the respective directories.
+
+
+### Fig. 1
+
+* [Directory](figures/fig1-overview/)
+* [Fig. 1](figures/fig1-overview/fig1.pdf)
+
+
+### Fig. 2
+
+* [Directory](fig2-camel-comp/)
+* [Fig. 2](figures/fig2-camel-comp/fig_camel_comp.pdf)
+
+
+### Fig. 3
+
+* [Directory](figures/fig3-masks/)
+* [Fig. 3](figures/fig3-masks/fig_masks.pdf)
+
+
 
 ## Remarks
 
