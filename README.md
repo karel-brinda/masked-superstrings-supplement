@@ -1,5 +1,6 @@
 # Masked superstrings – supplementary materials
 
+
 <!-- vim-markdown-toc GFM -->
 
 * [Introduction](#introduction)
@@ -11,10 +12,11 @@
   * [Input data](#input-data)
   * [Reproducing experimental results](#reproducing-experimental-results)
 * [Figures + supplementary plots](#figures--supplementary-plots)
-  * [Fig 1. - Overview of masked superstrings (Sec. 2-3.6)](#fig-1---overview-of-masked-superstrings-sec-2-36)
+  * [Fig. 1 - Overview of masked superstrings (Sec. 2-3.6)](#fig-1---overview-of-masked-superstrings-sec-2-36)
   * [Fig. 2 - Comparison of superstring heuristics (Sec. 3.7.1)](#fig-2---comparison-of-superstring-heuristics-sec-371)
   * [Fig. 3 - Comparison of mask heuristics (Sec. 3.7.2)](#fig-3---comparison-of-mask-heuristics-sec-372)
 * [Remarks](#remarks)
+* [Contact](#contact)
 
 <!-- vim-markdown-toc -->
 
@@ -113,7 +115,7 @@ make
 Figures are created using Adobe Illustrator and combine individual subfigures generated using R by scripts provided in the respective directories.
 
 
-### Fig 1. - Overview of masked superstrings (Sec. 2-3.6)
+### Fig. 1 - Overview of masked superstrings (Sec. 2-3.6)
 
 * [Fig. 1](figures/fig1-overview/fig1.pdf)
 
@@ -166,3 +168,10 @@ Figures are created using Adobe Illustrator and combine individual subfigures ge
 
 - 11_kmer_camel_comparison_v3: Makefile specifies the number of cores for Snakemake, via argument -j. To test whether everything works, run `make test` first. To make it faster, limit the range of *k* in the Snakefile.
 - 12_tigs_stats: uses compressed FASTA files computed by the [matchtigs](https://github.com/algbio/matchtigs) program
+
+
+## Contact
+
+* Karel Břinda (karel.brinda@inria.fr)
+* Pavel Veselý (vesely@iuuk.mff.cuni.cz)
+* Ondřej Sladký (ondra.sladky@gmail.com)
