@@ -142,12 +142,12 @@ Figures are created using Adobe Illustrator and combine individual subfigures ge
       [*S. pneumoniae* genome](figures/fig3-masks/Mxz_bits_per_superstring_char.spneumoniae.HT.pdf),
       [*S. pneumoniae* pan-genome](figures/fig3-masks/Mxz_bits_per_superstring_char.spneumoniae-pangenome.HT.pdf),
       [*S. cerevisiae* genome](figures/fig3-masks/Mxz_bits_per_superstring_char.yeast.HT.pdf),
-      [*SARS-CoV-2* pangenome](figures/fig3-masks/Mxz_bits_per_superstring_char.sars-cov-2.HT.pdf)
+      [*SARS-CoV-2* pangenome](figures/fig3-masks/Mxz_bits_per_superstring_char.sars-cov-2-pangenome.HT.pdf)
     * Aho-Corasick:
       [*S. pneumoniae* genome](figures/fig3-masks/Mxz_bits_per_superstring_char.spneumoniae.AC.pdf),
       [*S. pneumoniae* pan-genome](figures/fig3-masks/Mxz_bits_per_superstring_char.spneumoniae-pangenome.AC.pdf),
       [*S. cerevisiae* genome](figures/fig3-masks/Mxz_bits_per_superstring_char.yeast.AC.pdf),
-      [*SARS-CoV-2* pangenome](figures/fig3-masks/Mxz_bits_per_superstring_char.sars-cov-2.AC.pdf)
+      [*SARS-CoV-2* pangenome](figures/fig3-masks/Mxz_bits_per_superstring_char.sars-cov-2-pangenome.AC.pdf)
 
 
 
