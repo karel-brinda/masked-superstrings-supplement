@@ -10,10 +10,10 @@
 * [Experimental evaluation](#experimental-evaluation)
   * [Input data](#input-data)
   * [Reproducing experimental results](#reproducing-experimental-results)
-* [Paper figures and additional plots](#paper-figures-and-additional-plots)
-  * [Overview of masked superstrings (Sec. 2-3.6)](#overview-of-masked-superstrings-sec-2-36)
-  * [Comparison of superstring heuristics (Sec. 3.7.1)](#comparison-of-superstring-heuristics-sec-371)
-  * [Comparison of mask heuristics (Sec. 3.7.2)](#comparison-of-mask-heuristics-sec-372)
+* [Figures + supplementary plots](#figures--supplementary-plots)
+  * [Fig 1. - Overview of masked superstrings (Sec. 2-3.6)](#fig-1---overview-of-masked-superstrings-sec-2-36)
+  * [Fig. 2 - Comparison of superstring heuristics (Sec. 3.7.1)](#fig-2---comparison-of-superstring-heuristics-sec-371)
+  * [Fig. 3 - Comparison of mask heuristics (Sec. 3.7.2)](#fig-3---comparison-of-mask-heuristics-sec-372)
 * [Remarks](#remarks)
 
 <!-- vim-markdown-toc -->
@@ -108,21 +108,21 @@ make
 ```
 
 
-## Paper figures and additional plots
+## Figures + supplementary plots
 
 Figures are created using Adobe Illustrator and combine individual subfigures generated using R by scripts provided in the respective directories.
 
 
-### Overview of masked superstrings (Sec. 2-3.6)
+### Fig 1. - Overview of masked superstrings (Sec. 2-3.6)
 
 * [Fig. 1](figures/fig1-overview/fig1.pdf)
 
 
-### Comparison of superstring heuristics (Sec. 3.7.1)
+### Fig. 2 - Comparison of superstring heuristics (Sec. 3.7.1)
 
 * [Directory](figures/fig2-camel-comp/)
 * [Fig. 2](figures/fig2-camel-comp/fig_camel_comp.pdf)
-* Individual plots:
+* Supplementary plots:
   * Superstring characters per distinct *k*-mer - *S.pneumoniae* genome vs.
     pan-genome: [Aho-Corasick](figures/fig2-camel-comp/chars_per_kmer_AC.pdf),
     [Hash tables](figures/fig2-camel-comp/chars_per_kmer_HT.pdf)
@@ -132,11 +132,11 @@ Figures are created using Adobe Illustrator and combine individual subfigures ge
     tables](figures/fig2-camel-comp/xz_bits_per_kmer_HT.pdf)
 
 
-### Comparison of mask heuristics (Sec. 3.7.2)
+### Fig. 3 - Comparison of mask heuristics (Sec. 3.7.2)
 
 * [Directory](figures/fig3-masks/)
 * [Fig. 3](figures/fig3-masks/fig_masks.pdf)
-* Individual plots:
+* Supplementary plots:
   * Size of mask after compression (xz bits per distinct *k*-mer)
     * Hash table:
       [*S. pneumoniae* genome](figures/fig3-masks/Mxz_bits_per_superstring_char.spneumoniae.HT.pdf),
@@ -148,6 +148,17 @@ Figures are created using Adobe Illustrator and combine individual subfigures ge
       [*S. pneumoniae* pan-genome](figures/fig3-masks/Mxz_bits_per_superstring_char.spneumoniae-pangenome.AC.pdf),
       [*S. cerevisiae* genome](figures/fig3-masks/Mxz_bits_per_superstring_char.yeast.AC.pdf),
       [*SARS-CoV-2* pangenome](figures/fig3-masks/Mxz_bits_per_superstring_char.sars-cov-2-pangenome.AC.pdf)
+  * Runs per superstring character
+    * Hash table:
+      [*S. pneumoniae* genome](figures/fig3-masks/M_runs_per_superstring_char.spneumoniae.HT.pdf),
+      [*S. pneumoniae* pan-genome](figures/fig3-masks/M_runs_per_superstring_char.spneumoniae-pangenome.HT.pdf),
+      [*S. cerevisiae* genome](figures/fig3-masks/M_runs_per_superstring_char.yeast.HT.pdf),
+      [*SARS-CoV-2* pangenome](figures/fig3-masks/M_runs_per_superstring_char.sars-cov-2-pangenome.HT.pdf)
+    * Aho-Corasick:
+      [*S. pneumoniae* genome](figures/fig3-masks/M_runs_per_superstring_char.spneumoniae.AC.pdf),
+      [*S. pneumoniae* pan-genome](figures/fig3-masks/M_runs_per_superstring_char.spneumoniae-pangenome.AC.pdf),
+      [*S. cerevisiae* genome](figures/fig3-masks/M_runs_per_superstring_char.yeast.AC.pdf),
+      [*SARS-CoV-2* pangenome](figures/fig3-masks/M_runs_per_superstring_char.sars-cov-2-pangenome.AC.pdf)
 
 
 
