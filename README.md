@@ -50,33 +50,35 @@ KmerCamel🐫. Such masks contain the minimum possible number of 1's (i.e., ever
 orders in which individual *k*-mers are added to the superstrings, therefore,
 changes of the underlying data structures (hash-table vs. AC automaton), as
 well as changing machines or compilers, results or may result in different
-superstrings and masks with different mask compressibility.
-
-The default masks are denoted by `D` in the paper.
+superstrings and masks with different mask compressibility. These default masks
+are denoted by `D` in the paper.
 
 
 ### Mask optimization
 
-The masks were optimized using scripts in the
+The masks were optimized using the scripts in the
 [experiments/08_optimize_masks](experiments/08_optimize_masks/)
 directory, which implement individual mask optimization strategies.
 
 * [maskMinNumRuns.py](experiments/08_optimize_masks/maskMinNumRuns.py).
-  Minimization of the number of runs of 1's using [integer
+  Minimization of the number of runs of 1's by [integer
   programming](https://en.wikipedia.org/wiki/Integer_programming) using the
   [PuLP solver](https://github.com/coin-or/pulp/), as described in Appendix H.
   (Denoted by `R` in the paper.)
 * [maskMaxNumOnes.py](experiments/08_optimize_masks/maskMaxNumOnes.py).
-  Maximization of the number of 1's in the mask, which is done by 2 passes
-  through the superstring - collection of *k*-mers and masking on all of their
-  occurrences. (Denoted by `O` in the paper.)
+  Maximization of the number of 1's in the mask, which is achieved by
+  performing two passes through the superstring. In the first pass, the
+  underlying *k*-mer *K* is computed, and in the second pass, all occurrences
+  of *k*-mers from *K* are masked on. (Denoted by `O` in the paper.)
 * [maskMaxNumZeros.py](experiments/08_optimize_masks/maskMaxNumZeros.py).
-  Greedy minimization of the number of 1's (maximization of the number of 0's),
-  which is done by 1 pass through the data, masking on the first occurrence of
-  each *k*-mer and masking off the following ones. (Denoted by `Z` in the paper.)
+  Greedy minimization of the number of 1's (equivalent to maximization of the
+  number of 0's), which is achieved by by performing one pass through the data,
+  masking on the first occurrence of each *k*-mer while masking off all other
+  occurrences. (Denoted by `Z` in the paper.)
 
 
 ## Data used for experimental results
+
 The results in Figures 2 and 3 and Tables 1 and 2 were obtained using data in `experiments/11_kmer_camel_comparison_v3/99_results/masked_superstrings_properties.kamenac.tsv`.
 
 Additionally, Tables 1 and 2 use data from `experiments/12_tigs_stats/99_results/masked_superstrings_properties.kamenik.tsv`.
