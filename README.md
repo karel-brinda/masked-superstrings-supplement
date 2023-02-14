@@ -5,7 +5,7 @@
 
 * [Introduction](#introduction)
   * [Citation](#citation)
-* [Programs](#programs)
+* [Methods](#methods)
   * [Superstring computation - KmerCamel🐫](#superstring-computation---kmercamel)
   * [Mask optimization](#mask-optimization)
 * [Experimental evaluation](#experimental-evaluation)
@@ -41,7 +41,7 @@ Here we provide supplementary materials for the paper [Masked superstrings as a 
 ```
 
 
-## Programs
+## Methods
 
 ### Superstring computation - KmerCamel🐫
 
@@ -95,18 +95,23 @@ directory, which implement individual mask optimization strategies.
 We used four datasets for experimental evaluation (uploaded in the
 [data/](data/) directory):
 
-* *S. pneumoniae* genome (ATCC 700669, NC_011900.1,
-  [fna](https://www.ncbi.nlm.nih.gov/nuccore/NC_011900.1?report=fasta&log$=seqview&format=text))
+* *S. pneumoniae* genome (ATCC 700669, NC_011900.1, [fna
+  online](https://www.ncbi.nlm.nih.gov/nuccore/NC_011900.1?report=fasta&log$=seqview&format=text))
+  - [data/spneumoniae.fa.xz](data/spneumoniae.fa.xz)
 * *S. pneumoniae* pan-genome - 616 genomes, as provided in [RASE DB *S.
   pneumoniae*](https://github.com/c2-d2/rase-db-spneumoniae-sparc/)
-* *S. cerevisiae* genome (S288C,
-  [fna.gz](ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/146/045/GCF_000146045.2_R64/GCF_000146045.2_R64_genomic.fna.gz))
+  - [data/spneumo_pangenome_k32.fa.xz](data/spneumo_pangenome_k32.fa.xz)
+* *S. cerevisiae* genome (S288C, [fna.gz
+  online](ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/146/045/GCF_000146045.2_R64/GCF_000146045.2_R64_genomic.fna.gz))
+  - [data/yeast.fa.xz](data/yeast.fa.xz)
 * *SARS-CoV-2* pan-genome - downloaded from [GISAID](https://gisaid.org/)
   (access upon registration) on Jan 25, 2023 (GISAID version 2023_01_23,
   14,682,066 genomes, 430 Gbp)
-    * K-mers were collected using JellyFish 2 (v2.2.10, 11,701,570 32-mers) and
-      stored in the form of simplitigs (ProphAsm 0.1.1, k=32, NS 345,866, CL
-      22,423,416 bp)
+  - [data/sars-cov-2_pangenome_k32.fa.xz](data/sars-cov-2_pangenome_k32.fa.xz)
+    * *k*-mers were collected using JellyFish 2 (v2.2.10, 11,701,570 32-mers)
+      and stored in the form of simplitigs (ProphAsm v0.1.1, k=32, NS 345,866,
+      CL 22,423,416 bp)
+
 
 The results in Figures 2 and 3 and Tables 1 and 2 were obtained using data in `experiments/11_kmer_camel_comparison_v3/99_results/masked_superstrings_properties.kamenac.tsv`.
 
