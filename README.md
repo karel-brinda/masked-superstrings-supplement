@@ -44,19 +44,22 @@ experimentally implements local and global greedy heuristics for masked
 superstring computation using hash tables and the [Aho-Corasick
 automaton](https://en.wikipedia.org/wiki/Aho%E2%80%93Corasick_algorithm).
 
-The computed superstrings are provided with a default mask, which always
-contains the minimum number of 1's (i.e., every *k*-mer occurs just once). The
-specific pattern reflects the order in which individual *k*-mers and added to
-the superstring, therefore, a change of the underlying data structure
-(hash-table vs. AC automaton) results in different masks with potentially
-different compressibility. (Denoted by `D` in the paper.)
+The computed superstrings are provided with the default masks provided by
+KmerCamel🐫. Such masks contain the minimum possible number of 1's (i.e., every
+*k*-mer masked on only once). The specific pattern of 1's and 0's reflect the
+orders in which individual *k*-mers are added to the superstrings, therefore,
+changes of the underlying data structures (hash-table vs. AC automaton), as
+well as changing machines or compilers, results or may result in different
+superstrings and masks with different mask compressibility.
+
+The default masks are denoted by `D` in the paper.
 
 
 ### Mask optimization
 
-Individual mask optimization strategies are implemented in dedicated Python
-scripts in
-[http://experiments/08_optimize_masks](http://experiments/08_optimize_masks/).
+The masks were optimized using scripts in the
+[experiments/08_optimize_masks](experiments/08_optimize_masks/)
+directory, which implement individual mask optimization strategies.
 
 * [maskMinNumRuns.py](experiments/08_optimize_masks/maskMinNumRuns.py).
   Minimization of the number of runs of 1's using [integer
