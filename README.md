@@ -11,9 +11,9 @@
   * [Input data](#input-data)
   * [Reproducing experimental results](#reproducing-experimental-results)
 * [Figures](#figures)
-  * [Fig. 1](#fig-1)
-  * [Fig. 2](#fig-2)
-  * [Fig. 3](#fig-3)
+  * [Fig. 1 - Overview of masked superstrings](#fig-1---overview-of-masked-superstrings)
+  * [Fig. 2 - Comparison of superstring heuristics](#fig-2---comparison-of-superstring-heuristics)
+  * [Fig. 3 - Comparison of mask heuristics](#fig-3---comparison-of-mask-heuristics)
 * [Remarks](#remarks)
 
 <!-- vim-markdown-toc -->
@@ -112,19 +112,21 @@ make
 Figures are created using Adobe Illustrator and combine individual subfigures generated using R by scripts provided in the respective directories.
 
 
-### Fig. 1
+### Fig. 1 - Overview of masked superstrings
 
-* [Directory](figures/fig1-overview/)
 * [Fig. 1](figures/fig1-overview/fig1.pdf)
 
 
-### Fig. 2
+### Fig. 2 - Comparison of superstring heuristics
 
-* [Directory](fig2-camel-comp/)
+* [Directory](figures/fig2-camel-comp/)
 * [Fig. 2](figures/fig2-camel-comp/fig_camel_comp.pdf)
+* All individual plots:
+  * Superstring characters per distinct k-mer - S.pneumoniae genome vs. pan-genome: [Aho-Corasick](figures/fig2-camel-comp/chars_per_kmer_AC.pdf), [Hash tables](figures/fig2-camel-comp/chars_per_kmer_HT.pdf)
+  * Superstring compressibility (xz bits) - S.pneumoniae genome vs. pan-genome: [Aho-Corasick](figures/fig2-camel-comp/xz_bits_per_kmer_AC.pdf), [Hash tables](figures/fig2-camel-comp/xz_bits_per_kmer_HT.pdf)
 
 
-### Fig. 3
+### Fig. 3 - Comparison of mask heuristics
 
 * [Directory](figures/fig3-masks/)
 * [Fig. 3](figures/fig3-masks/fig_masks.pdf)
