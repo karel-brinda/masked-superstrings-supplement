@@ -1,5 +1,16 @@
 # Masked superstrings – supplementary materials
 
+<!-- vim-markdown-toc GFM -->
+
+* [Introduction](#introduction)
+* [Citation](#citation)
+* [KmerCamel🐫](#kmercamel)
+* [Data used for experimental results](#data-used-for-experimental-results)
+* [Reproducing experimental results](#reproducing-experimental-results)
+* [Remarks](#remarks)
+
+<!-- vim-markdown-toc -->
+
 ## Introduction
 
 Here we provide supplementary materials for the paper [Masked superstrings as a unified framework for textual *k*-mer set representations](https://doi.org/10.1101/2023.02.01.526717), including the used data and pipelines.
@@ -25,7 +36,7 @@ Here we provide supplementary materials for the paper [Masked superstrings as a 
 The analyses were performed using [KmerCamel🐫](https://github.com/GordonHoklinder/kmercamel),
 which experimentally implements local and global greedy heuristics for masked superstring
 computation using hash tables and the Aho-Corasick automaton.
-  
+
 ## Data used for experimental results
 The results in Figures 2 and 3 and Tables 1 and 2 were obtained using data in `experiments/11_kmer_camel_comparison_v3/99_results/masked_superstrings_properties.kamenac.tsv`.
 
