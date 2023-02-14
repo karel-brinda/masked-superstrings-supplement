@@ -101,7 +101,7 @@ We used four datasets for experimental evaluation (uploaded in the
 * *S. pneumoniae* pan-genome - 616 genomes, as provided in [RASE DB *S.
   pneumoniae*](https://github.com/c2-d2/rase-db-spneumoniae-sparc/)
   - *k*-mers were collected and stored in the form of simplitigs (ProphAsm
-    v0.1.1, k=32, NS: 158,567, CL 14,710,895 bp, 9,795,318 32-mers)
+    v0.1.1, k=32, NS: 158,567, CL: 14,710,895 bp, #kmers: 9,795,318 32-mers)
   - The resulting file:
     [data/spneumo_pangenome_k32.fa.xz](data/spneumo_pangenome_k32.fa.xz)
 * *S. cerevisiae* genome (S288C, [fna.gz
@@ -111,8 +111,8 @@ We used four datasets for experimental evaluation (uploaded in the
   (access upon registration) on Jan 25, 2023 (GISAID version 2023_01_23,
   14,682,066 genomes, 430 Gbp)
   - *k*-mers were collected using JellyFish 2 (v2.2.10, 11,701,570 32-mers) and
-    stored in the form of simplitigs (ProphAsm v0.1.1, k=32, NS 345,866, CL
-    22,423,416 bp)
+    stored in the form of simplitigs (ProphAsm v0.1.1, k=32, NS: 345,866, CL:
+    22,423,416 bp, #kmers: 11,701,570 32-mers)
   - The resulting file:
     [data/sars-cov-2_pangenome_k32.fa.xz](data/sars-cov-2_pangenome_k32.fa.xz)
 
